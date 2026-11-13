@@ -30,7 +30,14 @@ html,body{background:#060910;}
 body{min-height:100vh;min-height:100dvh;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);-webkit-text-size-adjust:100%;}
 #rec-nav{padding:0 .75rem;gap:.75rem;}
 #rec-footer{padding:0 .75rem;gap:.5rem;flex-wrap:wrap;height:auto;min-height:44px;padding-bottom:env(safe-area-inset-bottom,0px);}
-.nav-links{-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.nav-links{-webkit-overflow-scrolling:touch;scrollbar-width:none;min-width:0;}
+@media (max-width:600px){
+  #rec-nav{height:auto;flex-wrap:wrap;gap:0;padding:.5rem .75rem 0;}
+  .nav-logo{font-size:.9rem;letter-spacing:.2em;width:100%;text-align:center;padding-bottom:.4rem;}
+  .nav-st{display:none;}
+  .nav-links{order:3;flex:none;width:100%;overflow-x:auto;scroll-snap-type:x proximity;border-top:1px solid var(--b2);}
+  .nav-link{height:44px;padding:0 .9rem;scroll-snap-align:start;font-size:11px;}
+}
 .nav-links::-webkit-scrollbar{display:none;}
 .page{padding:1.5rem 1rem;}
 .ptitle{font-size:1.35rem;}

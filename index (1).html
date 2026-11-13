@@ -1,0 +1,1802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#060910">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="R.E.C.">
+<meta name="description" content="R.E.C. — RiggerTech Essenced Corporation. Paris Central Command.">
+<title>R.E.C. · RiggerTech Essenced Corporation</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<style>
+/* Loader (formerly loader.css, which was not included) */
+#rec-loader{position:fixed;inset:0;background:#060910;z-index:9999;display:flex;align-items:center;justify-content:center;transition:opacity .6s ease,visibility .6s;font-family:'Courier New',Courier,monospace;}
+#rec-loader .loader-scanline{position:absolute;left:0;right:0;height:2px;background:rgba(31,191,216,.25);animation:scan 2.5s linear infinite;top:0;}
+@keyframes scan{from{top:0}to{top:100%}}
+#rec-loader .loader-content{text-align:center;padding:1.5rem;width:min(420px,90vw);}
+#rec-loader .loader-logo{font-size:2rem;color:#1FBFD8;letter-spacing:.3em;margin-bottom:1rem;}
+#rec-loader .loader-title{font-size:11px;letter-spacing:.2em;color:#C4D4E8;margin-bottom:.4rem;}
+#rec-loader .loader-subtitle{font-size:9px;letter-spacing:.2em;color:#2E3F54;margin-bottom:1.5rem;}
+#rec-loader .loader-bar-container{height:3px;background:#182436;margin-bottom:1rem;}
+#rec-loader .loader-bar-fill{height:100%;width:0;background:#1FBFD8;transition:width .4s ease;}
+#rec-loader .loader-terminal{font-size:10px;letter-spacing:.1em;color:#64788F;min-height:14px;}
+
+/* Mobile layout */
+html,body{background:#060910;}
+body{min-height:100vh;min-height:100dvh;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);-webkit-text-size-adjust:100%;}
+#rec-nav{padding:0 .75rem;gap:.75rem;}
+#rec-footer{padding:0 .75rem;gap:.5rem;flex-wrap:wrap;height:auto;min-height:44px;padding-bottom:env(safe-area-inset-bottom,0px);}
+.nav-links{-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.nav-links::-webkit-scrollbar{display:none;}
+.page{padding:1.5rem 1rem;}
+.ptitle{font-size:1.35rem;}
+.ht{font-size:clamp(2.2rem,12vw,4rem);}
+input,select,textarea{font-size:16px;max-width:100%;}
+.g2,.g3{grid-template-columns:1fr;}
+@media (min-width:700px){.g2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr));}.g3{grid-template-columns:repeat(auto-fit,minmax(200px,1fr));}}
+.btn{min-height:44px;display:flex;align-items:center;justify-content:center;}
+</style>
+</head>
+<body>
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    :root {
+        --bg: #060910;
+        --bg2: #0B1121;
+        --bg3: #111928;
+        --cyan: #1FBFD8;
+        --cyand: #0A7A8F;
+        --C: #C49A28;
+        --red: #B03535;
+        --green: #2A9A5A;
+        --t: #C4D4E8;
+        --t2: #64788F;
+        --t3: #2E3F54;
+        --b: #182436;
+        --b2: #1F3250;
+        --mono: 'Courier New',Courier,monospace;
+    }
+
+    #rec-app {
+        min-height: 100vh;
+        background: var(--bg);
+        color: var(--t);
+        font-family: var(--mono);
+        font-size: 14px;
+    }
+
+    #rec-nav {
+        position: sticky;
+        top: 0;
+        background: var(--bg);
+        border-bottom: 1px solid var(--b2);
+        padding: 0 2rem;
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        height: 54px;
+        z-index: 999;
+    }
+
+    .nav-logo {
+        font-size: 1.1rem;
+        font-weight: bold;
+        color: var(--cyan);
+        letter-spacing: .3em;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+        .nav-logo em {
+            color: var(--t3);
+            font-style: normal;
+        }
+
+    .nav-links {
+        display: flex;
+        flex: 1;
+        overflow-x: auto;
+    }
+
+    .nav-link {
+        padding: 0 .75rem;
+        height: 54px;
+        display: flex;
+        align-items: center;
+        font-size: 10px;
+        letter-spacing: .15em;
+        color: var(--t2);
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        transition: color .2s,border-color .2s;
+        white-space: nowrap;
+        user-select: none;
+    }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--cyan);
+            border-bottom-color: var(--cyan);
+        }
+
+    .nav-st {
+        font-size: 9px;
+        letter-spacing: .1em;
+        color: var(--t3);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    .sdot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--green);
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0%,100% {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: .3;
+        }
+    }
+
+    #rec-content {
+        min-height: calc(100vh - 54px - 44px);
+    }
+
+    #rec-footer {
+        background: var(--bg);
+        border-top: 1px solid var(--b);
+        padding: 0 2rem;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 9px;
+        letter-spacing: .08em;
+        color: var(--t3);
+    }
+
+    .p7 {
+        cursor: pointer;
+        color: var(--t3);
+        transition: color .2s;
+    }
+
+        .p7:hover {
+            color: var(--t2);
+        }
+
+    .page {
+        padding: 2.5rem 2rem;
+        max-width: 1060px;
+        margin: 0 auto;
+    }
+
+    .ph {
+        margin-bottom: 2.5rem;
+        padding-bottom: 1.25rem;
+        border-bottom: 1px solid var(--b);
+    }
+
+    .pey {
+        font-size: 9px;
+        letter-spacing: .25em;
+        color: var(--cyand);
+        margin-bottom: .6rem;
+    }
+
+    .ptitle {
+        font-size: 1.7rem;
+        font-weight: bold;
+        color: var(--t);
+        letter-spacing: .05em;
+        line-height: 1.2;
+    }
+
+    .psub {
+        font-size: 12px;
+        color: var(--t2);
+        margin-top: .4rem;
+    }
+
+    .sec {
+        margin-bottom: 2.5rem;
+    }
+
+    .slabel {
+        font-size: 9px;
+        letter-spacing: .25em;
+        color: var(--t3);
+        margin-bottom: .75rem;
+        padding-bottom: .4rem;
+        border-bottom: 1px solid var(--b);
+    }
+
+    .card {
+        background: var(--bg2);
+        border: 1px solid var(--b);
+        padding: 1.1rem 1.25rem;
+        margin-bottom: .75rem;
+    }
+
+        .card:hover {
+            border-color: var(--b2);
+        }
+
+    .g2 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
+        gap: .75rem;
+    }
+
+    .g3 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+        gap: .75rem;
+    }
+
+    .rx {
+        background: var(--t2);
+        color: transparent;
+        user-select: none;
+        display: inline-block;
+        border-radius: 1px;
+        line-height: 1.3;
+    }
+
+    .cb {
+        font-size: 8px;
+        letter-spacing: .15em;
+        padding: 2px 7px;
+        border: 1px solid var(--red);
+        color: var(--red);
+        display: inline-block;
+    }
+
+    .sb {
+        font-size: 8px;
+        letter-spacing: .15em;
+        padding: 2px 7px;
+        border: 1px solid var(--green);
+        color: var(--green);
+        display: inline-block;
+    }
+
+    .ab {
+        font-size: 8px;
+        letter-spacing: .15em;
+        padding: 2px 7px;
+        border: 1px solid var(--C);
+        color: var(--C);
+        display: inline-block;
+    }
+
+    .strow {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-bottom: 2rem;
+    }
+
+    .stitem {
+        background: var(--bg2);
+        border: 1px solid var(--b);
+        padding: .9rem 1.2rem;
+        flex: 1;
+        min-width: 120px;
+    }
+
+    .stlbl {
+        font-size: 8px;
+        letter-spacing: .2em;
+        color: var(--t3);
+        margin-bottom: .35rem;
+    }
+
+    .stval {
+        font-size: 1.2rem;
+        color: var(--cyan);
+        font-weight: bold;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: .6rem 1.25rem;
+        border: 1px solid var(--cyand);
+        color: var(--cyan);
+        font-size: 10px;
+        letter-spacing: .18em;
+        cursor: pointer;
+        font-family: var(--mono);
+        background: transparent;
+        transition: background .2s;
+        margin-right: .75rem;
+        margin-top: .4rem;
+    }
+
+        .btn:hover {
+            background: rgba(31,191,216,.07);
+        }
+
+    .btng {
+        display: inline-block;
+        padding: .6rem 1.25rem;
+        border: 1px solid var(--b2);
+        color: var(--t2);
+        font-size: 10px;
+        letter-spacing: .18em;
+        cursor: pointer;
+        font-family: var(--mono);
+        background: transparent;
+        transition: background .2s;
+        margin-right: .75rem;
+        margin-top: .4rem;
+    }
+
+        .btng:hover {
+            background: rgba(255,255,255,.03);
+        }
+
+    hr.dv {
+        border: none;
+        border-top: 1px solid var(--b);
+        margin: 2rem 0;
+    }
+
+    input, textarea, select {
+        background: var(--bg3);
+        border: 1px solid var(--b);
+        color: var(--t);
+        font-family: var(--mono);
+        font-size: 12px;
+        padding: .55rem .75rem;
+        width: 100%;
+        margin-bottom: .85rem;
+        outline: none;
+        transition: border-color .2s;
+        appearance: none;
+    }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: var(--cyand);
+        }
+
+    label {
+        display: block;
+        font-size: 9px;
+        letter-spacing: .2em;
+        color: var(--t2);
+        margin-bottom: .25rem;
+    }
+
+    .tbar {
+        height: 3px;
+        background: var(--b);
+        margin-top: .4rem;
+    }
+
+    .tfill {
+        height: 100%;
+        background: var(--C);
+    }
+
+    .tli {
+        display: flex;
+        gap: 1.25rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .tly {
+        font-size: 10px;
+        color: var(--cyand);
+        letter-spacing: .08em;
+        min-width: 52px;
+        padding-top: 2px;
+        flex-shrink: 0;
+    }
+
+    .tlb {
+        flex: 1;
+        border-left: 1px solid var(--b);
+        padding-left: 1.25rem;
+    }
+
+    .tlt {
+        font-size: 12px;
+        color: var(--t);
+        margin-bottom: .25rem;
+        font-weight: bold;
+    }
+
+    .tld {
+        font-size: 11px;
+        color: var(--t2);
+        line-height: 1.6;
+    }
+
+    .acard {
+        background: var(--bg2);
+        border: 1px solid var(--b);
+        padding: 1.25rem;
+        margin-bottom: .75rem;
+    }
+
+    .aid {
+        font-size: 8px;
+        letter-spacing: .25em;
+        color: var(--t3);
+        margin-bottom: .35rem;
+    }
+
+    .aname {
+        font-size: 1rem;
+        color: var(--t);
+        font-weight: bold;
+        letter-spacing: .08em;
+        margin-bottom: .65rem;
+    }
+
+    .adv {
+        border: none;
+        border-top: 1px solid var(--b);
+        margin: .65rem 0;
+    }
+
+    .af {
+        display: flex;
+        gap: .75rem;
+        margin-bottom: .35rem;
+        font-size: 11px;
+        align-items: baseline;
+    }
+
+    .afk {
+        color: var(--t3);
+        letter-spacing: .08em;
+        min-width: 85px;
+        font-size: 9px;
+        flex-shrink: 0;
+    }
+
+    .afv {
+        color: var(--t2);
+        flex: 1;
+        line-height: 1.55;
+    }
+
+    .wbox {
+        border: 1px solid var(--red);
+        padding: .6rem .9rem;
+        margin-top: .65rem;
+        font-size: 10px;
+        color: var(--red);
+        letter-spacing: .04em;
+    }
+
+    .dgrid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
+        gap: 1px;
+        background: var(--b);
+        border: 1px solid var(--b);
+        margin-top: 2rem;
+    }
+
+    .dcell {
+        background: var(--bg);
+        padding: 1.25rem;
+        cursor: pointer;
+        transition: background .2s;
+    }
+
+        .dcell:hover {
+            background: var(--bg2);
+        }
+
+    .dci {
+        font-size: 1.3rem;
+        margin-bottom: .6rem;
+        color: var(--cyand);
+    }
+
+    .dcn {
+        font-size: 11px;
+        color: var(--t);
+        letter-spacing: .08em;
+        margin-bottom: .25rem;
+    }
+
+    .dcd {
+        font-size: 10px;
+        color: var(--t2);
+        line-height: 1.5;
+    }
+
+    .hero {
+        padding: 4rem 2rem 2.5rem;
+        max-width: 1060px;
+        margin: 0 auto;
+    }
+
+    .hey {
+        font-size: 9px;
+        letter-spacing: .35em;
+        color: var(--cyand);
+        margin-bottom: 1.25rem;
+    }
+
+    .ht {
+        font-size: 3.5rem;
+        font-weight: bold;
+        color: var(--t);
+        letter-spacing: .2em;
+        line-height: 1;
+        margin-bottom: 1rem;
+    }
+
+        .ht .ac {
+            color: var(--cyan);
+        }
+
+    .hs {
+        font-size: .95rem;
+        color: var(--t2);
+        letter-spacing: .12em;
+        margin-bottom: 2rem;
+        max-width: 560px;
+    }
+
+        .hs .sp {
+            color: var(--t3);
+            margin: 0 .75rem;
+        }
+
+    .folder {
+        border: 1px solid var(--red);
+        background: rgba(176,53,53,.04);
+        padding: 1rem 1.2rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .folder-title {
+        color: var(--red);
+        font-size: 10px;
+        letter-spacing: .25em;
+        margin-bottom: .5rem;
+    }
+
+    .folder-sub {
+        color: var(--t3);
+        font-size: 9px;
+        letter-spacing: .08em;
+        margin-bottom: 1rem;
+    }
+
+    .omega {
+        border-color: var(--red) !important;
+        box-shadow: 0 0 0 1px rgba(176,53,53,.15);
+    }
+
+    .blackout {
+        color: transparent;
+        background: var(--t2);
+        user-select: none;
+        border-radius: 1px;
+        display: inline-block;
+    }
+
+    /* ═══════════════════════════════════════════
+       DEADOLDWORLD — OMEGA ARCHIVE STYLES... JULEA HALTHEDRI WAS HERE ;)
+       ═══════════════════════════════════════════ */
+
+    /* Omega Warning Overlay */
+    #dow-overlay {
+        position: fixed;
+        inset: 0;
+        background: #000;
+        z-index: 9000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Courier New', Courier, monospace;
+        overflow: hidden;
+    }
+
+    #dow-overlay.hidden {
+        display: none;
+    }
+
+    .dow-scanline-overlay {
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(0,0,0,0.18) 2px,
+            rgba(0,0,0,0.18) 4px
+        );
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .dow-warning-box {
+        position: relative;
+        z-index: 2;
+        width: min(640px, 92vw);
+        border: 1px solid #7a5a1a;
+        padding: 2.5rem 2.5rem 2rem;
+        background: #080500;
+        box-shadow: 0 0 60px rgba(150, 100, 10, 0.15), inset 0 0 40px rgba(0,0,0,0.6);
+        text-align: center;
+        animation: dowFadeIn 0.5s ease forwards;
+    }
+
+    @keyframes dowFadeIn {
+        from { opacity: 0; transform: scale(0.97); }
+        to   { opacity: 1; transform: scale(1); }
+    }
+
+    .dow-seal {
+        font-size: 2.4rem;
+        color: #8a6010;
+        letter-spacing: .5em;
+        margin-bottom: 1.4rem;
+        text-shadow: 0 0 18px rgba(180,120,10,0.4);
+        user-select: none;
+    }
+
+    .dow-warn-step {
+        display: none;
+    }
+    .dow-warn-step.active {
+        display: block;
+        animation: dowFadeIn 0.4s ease forwards;
+    }
+
+    .dow-eyebrow {
+        font-size: 8px;
+        letter-spacing: .35em;
+        color: #5a3e08;
+        margin-bottom: .9rem;
+    }
+
+    .dow-warn-title {
+        font-size: 1rem;
+        letter-spacing: .22em;
+        color: #c8940a;
+        margin-bottom: 1.1rem;
+        line-height: 1.5;
+        text-shadow: 0 0 12px rgba(180,130,0,0.25);
+    }
+
+    .dow-warn-body {
+        font-size: 11px;
+        color: #7a6535;
+        line-height: 1.9;
+        letter-spacing: .04em;
+        margin-bottom: 1.5rem;
+        max-width: 480px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .dow-warn-body strong {
+        color: #a8800f;
+    }
+
+    .dow-warn-body em {
+        font-style: normal;
+        color: #c8940a;
+    }
+
+    .dow-divider {
+        border: none;
+        border-top: 1px solid #2e2008;
+        margin: 1.2rem 0;
+    }
+
+    .dow-step-indicator {
+        font-size: 8px;
+        letter-spacing: .3em;
+        color: #3a2a05;
+        margin-bottom: 1.4rem;
+    }
+
+    .dow-btn-row {
+        display: flex;
+        gap: .75rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .dow-btn-proceed {
+        padding: .55rem 1.6rem;
+        border: 1px solid #7a5a1a;
+        color: #c8940a;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 9px;
+        letter-spacing: .22em;
+        cursor: pointer;
+        background: transparent;
+        transition: background .2s, box-shadow .2s;
+    }
+    .dow-btn-proceed:hover {
+        background: rgba(150,100,10,0.08);
+        box-shadow: 0 0 8px rgba(150,100,10,0.2);
+    }
+
+    .dow-btn-abort {
+        padding: .55rem 1.4rem;
+        border: 1px solid #2e1a08;
+        color: #4a3510;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 9px;
+        letter-spacing: .22em;
+        cursor: pointer;
+        background: transparent;
+        transition: background .2s;
+    }
+    .dow-btn-abort:hover {
+        background: rgba(80,40,0,0.1);
+        color: #6a4a15;
+    }
+
+    /* Omega Passphrase Input */
+    .dow-passphrase-wrap {
+        margin-bottom: 1.4rem;
+    }
+
+    .dow-passphrase-label {
+        font-size: 8px;
+        letter-spacing: .25em;
+        color: #5a3e08;
+        margin-bottom: .5rem;
+        display: block;
+    }
+
+    .dow-passphrase-input {
+        background: #0a0700;
+        border: 1px solid #4a3510;
+        color: #c8940a;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 13px;
+        padding: .6rem 1rem;
+        width: 100%;
+        outline: none;
+        letter-spacing: .3em;
+        text-align: center;
+        transition: border-color .2s;
+    }
+    .dow-passphrase-input:focus {
+        border-color: #7a5a1a;
+    }
+    .dow-passphrase-input.error {
+        border-color: #8b2020;
+        color: #c04040;
+        animation: dowShake .3s ease;
+    }
+    @keyframes dowShake {
+        0%,100% { transform: translateX(0); }
+        25% { transform: translateX(-6px); }
+        75% { transform: translateX(6px); }
+    }
+    .dow-passphrase-err {
+        font-size: 9px;
+        color: #8b2020;
+        letter-spacing: .12em;
+        margin-top: .45rem;
+        min-height: 14px;
+    }
+
+    /* ── DEADOLDWORLD PAGE ITSELF ── */
+    .dow-page {
+        padding: 2.5rem 2rem;
+        max-width: 900px;
+        margin: 0 auto;
+        position: relative;
+    }
+
+    /* Aged paper texture overlay */
+    .dow-page::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background:
+            radial-gradient(ellipse at 20% 10%, rgba(60,35,5,0.06) 0%, transparent 60%),
+            radial-gradient(ellipse at 80% 90%, rgba(40,25,5,0.05) 0%, transparent 55%);
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .dow-ph {
+        margin-bottom: 2.5rem;
+        padding-bottom: 1.4rem;
+        border-bottom: 1px solid #2e1f08;
+        position: relative;
+    }
+
+    .dow-eyebrow-page {
+        font-size: 8px;
+        letter-spacing: .3em;
+        color: #5a3e08;
+        margin-bottom: .65rem;
+    }
+
+    .dow-ptitle {
+        font-size: 1.9rem;
+        font-weight: bold;
+        color: #c8940a;
+        letter-spacing: .14em;
+        line-height: 1.2;
+        text-shadow: 0 0 30px rgba(180,120,0,0.12);
+    }
+
+    .dow-psub {
+        font-size: 11px;
+        color: #5a3e08;
+        margin-top: .45rem;
+        letter-spacing: .06em;
+    }
+
+    .dow-omega-badge {
+        display: inline-block;
+        border: 1px solid #7a5a1a;
+        padding: 2px 10px;
+        font-size: 8px;
+        letter-spacing: .3em;
+        color: #c8940a;
+        margin-top: .75rem;
+        background: rgba(120,80,0,0.06);
+    }
+
+    /* Message cards */
+    .dow-msg {
+        background: #08060100;
+        border: 1px solid #2e1f08;
+        border-left: 3px solid #5a3e08;
+        padding: 1.2rem 1.4rem;
+        margin-bottom: 1.1rem;
+        position: relative;
+        transition: border-left-color .25s;
+    }
+    .dow-msg:hover {
+        border-left-color: #8a6010;
+    }
+
+    .dow-msg-header {
+        display: flex;
+        align-items: baseline;
+        gap: .75rem;
+        flex-wrap: wrap;
+        margin-bottom: .8rem;
+        padding-bottom: .6rem;
+        border-bottom: 1px solid #1e1408;
+    }
+
+    .dow-msg-from {
+        font-size: 9px;
+        letter-spacing: .22em;
+        color: #8a6010;
+        font-weight: bold;
+    }
+
+    .dow-msg-arrow {
+        font-size: 9px;
+        color: #3a2808;
+    }
+
+    .dow-msg-to {
+        font-size: 9px;
+        letter-spacing: .18em;
+        color: #5a3e08;
+    }
+
+    .dow-msg-date {
+        font-size: 8px;
+        letter-spacing: .15em;
+        color: #3a2808;
+        margin-left: auto;
+    }
+
+    .dow-msg-tag {
+        font-size: 7px;
+        letter-spacing: .2em;
+        border: 1px solid #3a2808;
+        color: #5a3e08;
+        padding: 1px 6px;
+        display: inline-block;
+        margin-left: .5rem;
+        vertical-align: middle;
+    }
+
+    .dow-msg-body {
+        font-size: 12px;
+        color: #8a7050;
+        line-height: 1.9;
+        letter-spacing: .02em;
+    }
+
+    .dow-msg-body em {
+        font-style: normal;
+        color: #b89040;
+    }
+
+    .dow-msg-footer {
+        margin-top: .7rem;
+        font-size: 8px;
+        color: #3a2808;
+        letter-spacing: .12em;
+    }
+
+    .dow-section-label {
+        font-size: 8px;
+        letter-spacing: .3em;
+        color: #3a2808;
+        border-bottom: 1px solid #1e1408;
+        padding-bottom: .4rem;
+        margin-bottom: 1rem;
+        margin-top: 2rem;
+    }
+
+    .dow-note-box {
+        border: 1px solid #3a2808;
+        background: rgba(30,15,0,0.4);
+        padding: .8rem 1rem;
+        margin-bottom: 1.4rem;
+        font-size: 10px;
+        color: #5a3e08;
+        letter-spacing: .06em;
+        line-height: 1.7;
+    }
+
+    .dow-stamp {
+        display: inline-block;
+        border: 2px solid rgba(140,30,30,0.35);
+        color: rgba(140,30,30,0.35);
+        font-size: 10px;
+        letter-spacing: .3em;
+        padding: 3px 10px;
+        transform: rotate(-2deg);
+        margin-left: 1rem;
+        vertical-align: middle;
+        user-select: none;
+    }
+
+    .dow-redacted {
+        background: #c8940a;
+        color: transparent;
+        user-select: none;
+        border-radius: 1px;
+        display: inline-block;
+        opacity: 0.18;
+    }
+
+    .dow-footer-bar {
+        margin-top: 3rem;
+        padding-top: 1.2rem;
+        border-top: 1px solid #1e1408;
+        font-size: 8px;
+        color: #2e1f08;
+        letter-spacing: .18em;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: .5rem;
+    }
+
+    /* Override bg for DOW page */
+    #rec-app.dow-active {
+        background: #040200;
+    }
+    #rec-app.dow-active #rec-nav {
+        background: #040200;
+        border-bottom-color: #1e1408;
+    }
+    #rec-app.dow-active .nav-logo {
+        color: #8a6010;
+    }
+    #rec-app.dow-active .nav-link.active {
+        color: #c8940a;
+        border-bottom-color: #8a6010;
+    }
+    #rec-app.dow-active #rec-footer {
+        background: #040200;
+        border-top-color: #1e1408;
+        color: #2e1f08;
+    }
+    #rec-app.dow-active .nav-st {
+        color: #3a2808;
+    }
+    #rec-app.dow-active .sdot {
+        background: #8a6010;
+    }
+</style>
+
+<div id="rec-app">
+    <!-- Secure Boot Sequence Loader Component... wow so cheesy-->
+    <div id="rec-loader">
+        <div class="loader-scanline"></div>
+        <div class="loader-content">
+            <div class="loader-logo"><em>[</em>R<em style="color:var(--b2)">·</em>E<em style="color:var(--b2)">·</em>C<em>]</em></div>
+            <div class="loader-title">RIGGERTECH ESSENCED CORPORATION</div>
+            <div class="loader-subtitle">// PARIS CENTRAL COMMAND //</div>
+            <div class="loader-bar-container">
+                <div class="loader-bar-fill"></div>
+            </div>
+            <div id="loader-terminal" class="loader-terminal">INITIALIZING SECURE HANDSHAKE...</div>
+        </div>
+    </div>
+
+    <!-- DEADOLDWORLD · OMEGA CLEARANCE GATE -->
+    <div id="dow-overlay" class="hidden">
+        <div class="dow-scanline-overlay"></div>
+        <div class="dow-warning-box">
+            <div class="dow-seal">Ω</div>
+
+            <!-- STEP SIX MILLION... YOUR WALL IS SO EASY. JULEA WAS HERE xP-->
+            <div class="dow-warn-step active" id="dow-step-1">
+                <div class="dow-eyebrow">// NODE: DEADOLDWORLD · ACCESS ATTEMPT DETECTED</div>
+                <div class="dow-warn-title">RESTRICTED ARCHIVE — OMEGA CLEARANCE REQUIRED</div>
+                <div class="dow-warn-body">
+                    You are attempting to access a sealed archive node designated <em>DEADOLDWORLD</em>. This node contains recovered communications from a <strong>former organization</strong> no longer in operation.<br><br>
+                    This material was not archived through standard R.E.C. channels. <strong>Its existence is not officially acknowledged.</strong>
+                </div>
+                <hr class="dow-divider">
+                <div class="dow-step-indicator">WARNING 1 OF 3</div>
+                <div class="dow-btn-row">
+                    <button class="dow-btn-proceed" onclick="dowStep(2)">ACKNOWLEDGE AND CONTINUE</button>
+                    <button class="dow-btn-abort" onclick="dowAbort()">ABORT ACCESS</button>
+                </div>
+            </div>
+
+            <!-- STEP 2 -->
+            <div class="dow-warn-step" id="dow-step-2">
+                <div class="dow-eyebrow">// LEGAL & INSTITUTIONAL NOTICE</div>
+                <div class="dow-warn-title">YOUR SESSION IS BEING RECORDED</div>
+                <div class="dow-warn-body">
+                    Access to this archive is granted <strong>only to personnel holding active Omega-level clearance</strong> as conferred directly by the Director's office. Unauthorized review constitutes an institutional breach under <em>R.E.C. Security Directive 09-Ω</em>.<br><br>
+                    Your credential signature, device fingerprint, and session timestamp <strong>have already been logged</strong>. Continued access without valid clearance is subject to immediate review, suspension, and referral to Internal Investigations.
+                </div>
+                <hr class="dow-divider">
+                <div class="dow-step-indicator">WARNING 2 OF 3</div>
+                <div class="dow-btn-row">
+                    <button class="dow-btn-proceed" onclick="dowStep(3)">I UNDERSTAND — PROCEED</button>
+                    <button class="dow-btn-abort" onclick="dowAbort()">ABORT ACCESS</button>
+                </div>
+            </div>
+
+            <!-- STEP 3 — Passphrase -->
+            <div class="dow-warn-step" id="dow-step-3">
+                <div class="dow-eyebrow">// OMEGA CLEARANCE VERIFICATION</div>
+                <div class="dow-warn-title">ENTER OMEGA PASSPHRASE</div>
+                <div class="dow-warn-body">
+                    Final verification required. Enter the <em>Gentlemen's passphrase</em> as issued by Paris Central Command. Incorrect entries are logged. <strong>Three failed attempts will terminate this session.</strong>
+                </div>
+                <div class="dow-passphrase-wrap">
+                    <span class="dow-passphrase-label">OMEGA PASSPHRASE</span>
+                    <input class="dow-passphrase-input" id="dow-passphrase" type="password" placeholder="· · · · · · · · · · · ·" autocomplete="off" onkeydown="if(event.key==='Enter')dowVerify()"/>
+                    <div class="dow-passphrase-err" id="dow-pass-err"></div>
+                </div>
+                <hr class="dow-divider">
+                <div class="dow-step-indicator">WARNING 3 OF 3 · <span id="dow-attempts-left">3 ATTEMPTS REMAINING</span></div>
+                <div class="dow-btn-row">
+                    <button class="dow-btn-proceed" onclick="dowVerify()">VERIFY CLEARANCE</button>
+                    <button class="dow-btn-abort" onclick="dowAbort()">ABORT ACCESS</button>
+                </div>
+            </div>
+
+            <!-- STEP 4 — Locked... my butt. Seriously, Riggers, how much do you pay your it guys :P -->
+            <div class="dow-warn-step" id="dow-step-locked">
+                <div class="dow-eyebrow">// SESSION TERMINATED</div>
+                <div class="dow-warn-title" style="color:#8b2020;">ACCESS DENIED · SESSION FLAGGED</div>
+                <div class="dow-warn-body" style="color:#5a2020;">
+                    Maximum verification attempts exceeded. This session has been <strong>flagged and reported</strong> to R.E.C. Internal Investigations. You will be contacted through a channel of our choosing.<br><br>
+                    <em>Do not attempt re-entry.</em>
+                </div>
+                <hr class="dow-divider">
+                <div class="dow-btn-row">
+                    <button class="dow-btn-abort" onclick="dowAbort()">RETURN TO SYSTEM</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav id="rec-nav">
+        <div class="nav-logo"><em>[</em>R<em style="color:var(--b2)">·</em>E<em style="color:var(--b2)">·</em>C<em>]</em></div>
+        <div class="nav-links" id="navlinks">
+            <div class="nav-link active" data-p="home" onclick="nav('home')">HOME</div>
+            <div class="nav-link" data-p="about" onclick="nav('about')">ABOUT</div>
+            <div class="nav-link" data-p="operations" onclick="nav('operations')">OPERATIONS</div>
+            <div class="nav-link" data-p="tech" onclick="nav('tech')">TECHNOLOGY</div>
+            <div class="nav-link" data-p="lore" onclick="nav('lore')">HISTORY</div>
+            <div class="nav-link" data-p="recruitment" onclick="nav('recruitment')">RECRUITMENT</div>
+            <div class="nav-link" data-p="contact" onclick="nav('contact')">CONTACT</div>
+        </div>
+        <div class="nav-st"><span class="sdot"></span>SECURE · ACTIVE</div>
+    </nav>
+
+    <main id="rec-content"></main>
+
+    <footer id="rec-footer">
+        <span>© 2042 RIGGERTECH ESSENCED CORPORATION — PARIS CENTRAL COMMAND</span>
+        <span>ALL ACCESS IS MONITORED AND LOGGED · UNAUTHORIZED USE IS PROSECUTED</span>
+        <span class="p7" onclick="nav('personnel')">[ PROTOCOL-7 ]</span>
+    </footer>
+</div>
+
+<script>
+    const pages={
+
+    home:()=>`
+    <div class="hero">
+    <div class="hey">// DESIGNATION: REC-HQ-PARIS · STATUS: OPERATIONAL · CLEARANCE: PUBLIC</div>
+    <div class="ht"><span class="ac">R.E.C.</span></div>
+    <div style="font-size:11px;letter-spacing:.18em;color:var(--t3);margin-bottom:.75rem;">RIGGERTECH ESSENCED CORPORATION</div>
+    <div class="hs">SERVE THE TRUTH.<span class="sp">·</span>INTERCEPT DANGER.</div>
+    <p style="font-size:12px;color:var(--t2);max-width:600px;line-height:1.85;margin-bottom:2rem;">We operate where others cannot. Where law fractures and order dissolves — R.E.C. is already there. A classified, self-sustaining institution dedicated to the detection, interception, and neutralization of threats before they surface. What you know about us is deliberately limited.</p>
+    <div>
+    <div class="btn" onclick="nav('about')">ACCESS OVERVIEW</div>
+    <div class="btng" onclick="nav('recruitment')">INITIATE APPLICATION</div>
+    </div>
+    <hr class="dv">
+    <div class="strow">
+    <div class="stitem"><div class="stlbl">ACTIVE OPERATIONS</div><div class="stval"><span class="rx">██</span></div></div>
+    <div class="stitem"><div class="stlbl">THREAT LEVEL</div><div class="stval" style="color:var(--c)">C</div><div class="tbar"><div class="tfill" style="width:62%"></div></div></div>
+    <div class="stitem"><div class="stlbl">OPERATIVES DEPLOYED</div><div class="stval"><span class="rx">███</span></div></div>
+    <div class="stitem"><div class="stlbl">INCIDENTS CLOSED (2042)</div><div class="stval" style="color:var(--green)">94</div></div>
+    </div>
+    <div class="dgrid">
+    <div class="dcell" onclick="nav('about')"><div class="dci">▲</div><div class="dcn">TERROR-HUNTERS</div><div class="dcd">Active pursuit of terrorists & hired threats.</div></div>
+    <div class="dcell" onclick="nav('about')"><div class="dci">◼</div><div class="dcn">FRONTLINE</div><div class="dcd">Backbone of the Corp. Crowd protection, civil order, direct enforcement.</div></div>
+    <div class="dcell" onclick="nav('about')"><div class="dci">◈</div><div class="dcn">SCIENCE DIVISION</div><div class="dcd">Research at the boundary of the known. Some fields remain unlisted.</div></div>
+    <div class="dcell" onclick="nav('about')"><div class="dci">✦</div><div class="dcn">MEDICAL & SUPPORT</div><div class="dcd">Personnel care, field triage, institutional continuity.</div></div>
+    <div class="dcell" onclick="nav('about')"><div class="dci">◎</div><div class="dcn">DETECTIVE BRANCH</div><div class="dcd">Investigation, forensics, and the reading of truth from shadow.</div></div>
+    </div>
+    </div>`,
+
+    about:()=>`
+    <div class="page">
+    <div class="ph"><div class="pey">// DOCUMENT CLASS: OVERVIEW · CLEARANCE: STANDARD</div><div class="ptitle">ABOUT R.E.C.</div><div class="psub">RiggerTech Essenced Corporation — Paris Central Command</div></div>
+    <div class="sec">
+    <div class="slabel">DIRECTOR'S NOTE</div>
+    <div class="card">
+    <div style="font-size:9px;letter-spacing:.2em;color:var(--t3);margin-bottom:.9rem;">FROM THE DESK OF DIRECTOR RIGGERS BEAUMONT</div>
+    <p style="font-size:12px;color:var(--t2);line-height:1.85;margin-bottom:.9rem;">This institution was not born from ambition. It was born from necessity. The world you see — its headlines, its visible crises — is a fraction of what truly moves beneath the surface. R.E.C. exists to address what cannot be publicly acknowledged, by individuals willing to operate without recognition or reward.</p>
+    <p style="font-size:12px;color:var(--t2);line-height:1.85;">We do not ask for trust. We earn it, quietly, in the dark, every single day.</p>
+    <div style="margin-top:1rem;font-size:10px;color:var(--t3);letter-spacing:.1em;">— RIGGERS BEAUMONT, Director · RiggerTech Essenced Corporation · Paris</div>
+    </div>
+    </div>
+    <div class="sec">
+    <div class="slabel">INSTITUTIONAL OVERVIEW</div>
+    <p style="font-size:12px;color:var(--t2);line-height:1.85;max-width:720px;margin-bottom:1.25rem;">R.E.C. operates as a fully self-contained intelligence and enforcement body headquartered in Paris, France. Founded under circumstances that remain partially classified, the Corporation functions autonomously from standard governmental oversight while maintaining informal cooperation with select international partners.</p>
+    <p style="font-size:12px;color:var(--t2);line-height:1.85;max-width:720px;">Our mandate spans active threat interception, civilian protection, and research into fields that existing institutions are neither equipped nor authorized to pursue. Personnel are vetted to an extraordinary degree. Many carry capabilities that defy conventional classification.</p>
+    </div>
+    <hr class="dv">
+    <div class="sec">
+    <div class="slabel">ACTIVE DIVISIONS</div>
+    <div class="g2">
+    <div class="card"><div style="color:var(--cyan);font-size:10px;letter-spacing:.2em;margin-bottom:.45rem;">▲ TERROR-HUNTERS</div><p style="font-size:11px;color:var(--t2);line-height:1.7;">Captains and their assigned Agents operating at the sharpest edge of R.E.C.'s mandate. Dedicated to the active location, pursuit, and neutralization of terrorist cells, contract killers, and organized violent threats. Direct engagement specialists.</p></div>
+    <div class="card"><div style="color:var(--cyan);font-size:10px;letter-spacing:.2em;margin-bottom:.45rem;">◼ FRONTLINE</div><p style="font-size:11px;color:var(--t2);line-height:1.7;">The institutional backbone. Frontline operatives handle civilian protection during active incidents, crowd management, direct lawless suppression, and sustained field presence. Without them, R.E.C. does not function.</p></div>
+    <div class="card"><div style="color:var(--cyan);font-size:10px;letter-spacing:.2em;margin-bottom:.45rem;">◈ SCIENCE DIVISION</div><p style="font-size:11px;color:var(--t2);line-height:1.7;">A diverse body of researchers operating across conventional and unconventional disciplines. Several sub-departments remain unlisted. Certain areas of inquiry are restricted even within R.E.C. itself. Proceed with appropriate clearance.</p></div>
+    <div class="card"><div style="color:var(--cyan);font-size:10px;letter-spacing:.2em;margin-bottom:.45rem;">✦ MEDICAL & SUPPORT</div><p style="font-size:11px;color:var(--t2);line-height:1.7;">Doctors, nurses, and essential staff ensuring the physical and operational continuity of all personnel. Field triage, long-term care, and the internal administrative infrastructure that sustains every division.</p></div>
+    <div class="card"><div style="color:var(--cyan);font-size:10px;letter-spacing:.2em;margin-bottom:.45rem;">◎ DETECTIVE BRANCH</div><p style="font-size:11px;color:var(--t2);line-height:1.7;">Investigation, forensic analysis, and intelligence interpretation. The Detective Branch operates where conventional law enforcement either cannot or will not. They find what others have buried — and they are very good at it.</p></div>
+    </div>
+    </div>
+    <hr class="dv">
+    <div class="sec">
+    <div class="slabel">DIRECTOR PROFILE</div>
+    <div class="card">
+    <div class="g2" style="gap:1.5rem;align-items:start;">
+    <div>
+    <div style="font-size:9px;letter-spacing:.2em;color:var(--t3);margin-bottom:.4rem;">DESIGNATION · REC-DIR-001</div>
+    <div style="font-size:1.3rem;color:var(--t);font-weight:bold;letter-spacing:.08em;margin-bottom:.9rem;">RIGGERS BEAUMONT</div>
+    <div class="af"><span class="afk">RANK</span><span class="afv">Director, R.E.C.</span></div>
+    <div class="af"><span class="afk">NATIONALITY</span><span class="afv">French</span></div>
+    <div class="af"><span class="afk">BASED</span><span class="afv">Paris Central Command</span></div>
+    <div class="af"><span class="afk">CLEARANCE</span><span class="afv"><span class="cb">LEVEL 10 · OMEGA</span></span></div>
+    </div>
+    <div>
+    <p style="font-size:11px;color:var(--t2);line-height:1.85;margin-bottom:.75rem;">Beaumont has overseen R.E.C. through its most consequential years of expansion and internal restructuring. His approach is methodical, deliberate, and opaque to all but the highest-clearance personnel.</p>
+    <p style="font-size:11px;color:var(--t2);line-height:1.85;">Prior history: <span class="rx">████████████████████████████████</span>. Previous affiliations: <span class="rx">████████████████</span>. Character assessment: <span class="rx">██████████████████████████</span>.</p>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>`,
+
+    operations:()=>`
+    <div class="page">
+    <div class="ph"><div class="pey">// DOCUMENT CLASS: OPERATIONAL · CLEARANCE: STANDARD</div><div class="ptitle">OPERATIONS</div><div class="psub">Declassified summaries only. Full dossiers require elevated clearance.</div></div>
+    <div class="strow">
+    <div class="stitem"><div class="stlbl">CURRENTLY ACTIVE</div><div class="stval" style="font-size:.95rem;"><span class="sb">ONGOING</span></div></div>
+    <div class="stitem"><div class="stlbl">CLOSED (2042)</div><div class="stval">41</div></div>
+    <div class="stitem"><div class="stlbl">PENDING CLASSIFICATION</div><div class="stval" style="color:var(--C)"><span class="rx">██</span></div></div>
+    <div class="stitem"><div class="stlbl">CURRENT THREAT TIER</div><div class="stval" style="font-size:.95rem;"><span class="ab">C</span></div></div>
+    </div>
+    <div class="sec">
+    <div class="slabel">ACTIVE / RECENT CASE FILES</div>
+    <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:.65rem;">
+    <div><div style="font-size:9px;letter-spacing:.18em;color:var(--t3);">CASE FILE · REC-OPS-2041-017</div><div style="font-size:.95rem;color:var(--t);font-weight:bold;margin-top:.25rem;">OPERATION PALE MERIDIAN</div></div>
+    <span class="sb">ACTIVE</span>
+    </div>
+    <p style="font-size:11px;color:var(--t2);line-height:1.7;">Coordinated interception campaign targeting a decentralized network of contract operatives believed to operate across <span class="rx">████</span> and <span class="rx">████████</span>. Frontline and Terror-Hunter units deployed. Civilian exposure: minimal. Further details restricted.</p>
+    <div style="margin-top:.65rem;font-size:9px;color:var(--t3);letter-spacing:.08em;">ASSIGNED: TERROR-HUNTERS · FRONTLINE · FULL DOSSIER REQUIRES ELEVATED CLEARANCE</div>
+    </div>
+    <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:.65rem;">
+    <div><div style="font-size:9px;letter-spacing:.18em;color:var(--t3);">CASE FILE · REC-OPS-2040-009</div><div style="font-size:.95rem;color:var(--t);font-weight:bold;margin-top:.25rem;">OPERATION KAFRO-GREEK BLINDERS</div></div>
+    <span style="font-size:8px;letter-spacing:.12em;padding:2px 7px;border:1px solid var(--t3);color:var(--t3);">CLOSED</span>
+    </div>
+    <p style="font-size:11px;color:var(--t2);line-height:1.7;">Rapid response to a mass civilian endangerment event in <span class="rx">██████████</span>. Frontline units achieved full crowd stabilization within <span class="rx">██</span> minutes of deployment. Three operatives sustained non-critical injuries. Primary threat actor: neutralized.</p>
+    <div style="margin-top:.65rem;font-size:9px;color:var(--t3);letter-spacing:.08em;">ASSIGNED: FRONTLINE · MEDICAL UNIT 4 · OUTCOME: SUCCESSFUL</div>
+    </div>
+    <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:.65rem;">
+    <div><div style="font-size:9px;letter-spacing:.18em;color:var(--t3);">CASE FILE · REC-OPS-2040-<span class="rx">███</span></div><div style="font-size:.95rem;color:var(--t);font-weight:bold;margin-top:.25rem;"><span class="rx">████████████████████</span></div></div>
+    <span class="cb">CLASSIFIED</span>
+    </div>
+    <p style="font-size:11px;color:var(--t2);line-height:1.7;"><span class="rx">██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████</span></p>
+    <div style="margin-top:.65rem;font-size:9px;color:var(--t3);letter-spacing:.08em;">DIVISION: <span class="rx">████████████████</span> · OMEGA CLEARANCE REQUIRED</div>
+    </div>
+    <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:.65rem;">
+    <div><div style="font-size:9px;letter-spacing:.18em;color:var(--t3);">CASE FILE · REC-OPS-2041-031</div><div style="font-size:.95rem;color:var(--t);font-weight:bold;margin-top:.25rem;">OPERATION GREYSH OWL</div></div>
+    <span class="ab">PENDING</span>
+    </div>
+    <p style="font-size:11px;color:var(--t2);line-height:1.7;">Ongoing surveillance and data-gathering on a known arms-facilitation network. Intelligence suggests deep involvement of <span class="rx">█████████████████</span>. Science Division consultation requested. Status: escalating.</p>
+    <div style="margin-top:.65rem;font-size:9px;color:var(--t3);letter-spacing:.08em;">ASSIGNED: TERROR-HUNTERS · SCIENCE (CONSULT) · THRESHOLD: C</div>
+    </div>
+    </div>
+    <div style="font-size:10px;color:var(--t3);letter-spacing:.08em;">
+    <div class="folder omega">
+    <div class="folder-title">OMEGA ARCHIVES</div>
+    <div class="folder-sub">ACCESS LEVEL 10 REQUIRED · ALL ACCESS ATTEMPTS LOGGED</div>
+    <div class="card omega"><div><div style="font-size:9px;color:var(--t3);letter-spacing:.18em;">ARCHIVE · OMEGA-Z</div><div style="font-size:1rem;color:var(--t);font-weight:bold;margin-top:.25rem;">ARTICLE Z</div></div><p style="margin-top:.75rem;font-size:11px;color:var(--t2);line-height:1.8;">Biological specimen secured beneath Paris Central Command. Origin remains disputed. Recovery circumstances sealed. Access prohibited without Director authorization. Several historical records connected to the specimen have been removed from circulation.</p></div>
+    <div class="card omega"><div><div style="font-size:9px;color:var(--t3);letter-spacing:.18em;">ARCHIVE · OMEGA-Σ</div><div style="font-size:1rem;color:var(--t);font-weight:bold;margin-top:.25rem;">SLOSKRAN CHRONAUTIC EXPERIMENTS</div></div><p style="margin-top:.75rem;font-size:11px;color:var(--t2);line-height:1.8;">Joint initiative involving Doctor David Sloskra and select RiggerTech personnel. Project objective concerns the prevention of undesirable outcomes before formal occurrence. Methodology, chronology logs, and supporting documentation remain restricted.</p></div>
+    </div>
+    <div style="font-size:10px;color:var(--t3);letter-spacing:.08em;">Displaying 4 of <span class="rx">██</span> accessible records. Additional files require elevated clearance. Contact your supervising Captain or the Director's office.</div>
+    </div>`,
+
+    tech:()=>`
+    <div class="page">
+    <div class="ph"><div class="pey">// DOCUMENT CLASS: EQUIPMENT REGISTRY · CLEARANCE: STANDARD</div><div class="ptitle">TECHNOLOGY & EQUIPMENT</div><div class="psub">Partial registry. Full specifications withheld above standard clearance.</div></div>
+    <div class="sec">
+    <div class="slabel">TACTICAL ARMOR SYSTEMS</div>
+    <p style="font-size:11px;color:var(--t2);line-height:1.7;max-width:680px;margin-bottom:1.25rem;">R.E.C. deploys a range of custom-developed armored systems across its divisions. All suits are field-rated and continuously updated through internal R&D. Material compositions and fabrication processes are withheld from this registry.</p>
+    <div class="g3">
+    <div class="card"><div style="font-size:9px;letter-spacing:.18em;color:var(--cyand);margin-bottom:.35rem;">REC-ARM-01</div><div style="font-size:12px;color:var(--t);margin-bottom:.5rem;">T.A.S.E.G. Gauntlets</div><div class="af"><span class="afk">CLASS</span><span class="afv">Higher End Armory</span></div><div class="af"><span class="afk">DIVISION</span><span class="afv">Frontline</span></div><div class="af"><span class="afk">WEIGHT</span><span class="afv"><span class="rx">████</span> kg</span></div><div class="af"><span class="afk">SPECS</span><span class="afv"><span class="cb">CLASSIFIED</span></span></div></div>
+    <div class="card"><div style="font-size:9px;letter-spacing:.18em;color:var(--cyand);margin-bottom:.35rem;">REC-ARM-04</div><div style="font-size:12px;color:var(--t);margin-bottom:.5rem;">VANTAGE HEAVY RIG</div><div class="af"><span class="afk">CLASS</span><span class="afv">Heavy Assault</span></div><div class="af"><span class="afk">DIVISION</span><span class="afv">Terror-Hunters</span></div><div class="af"><span class="afk">WEIGHT</span><span class="afv"><span class="rx">████</span> kg</span></div><div class="af"><span class="afk">SPECS</span><span class="afv"><span class="cb">CLASSIFIED</span></span></div></div>
+    <div class="card"><div style="font-size:9px;letter-spacing:.18em;color:var(--cyand);margin-bottom:.35rem;">REC-ARM-<span class="rx">███</span></div><div style="font-size:12px;color:var(--t);margin-bottom:.5rem;"><span class="rx">█████████████</span></div><div class="af"><span class="afk">CLASS</span><span class="afv"><span class="rx">████████████</span></span></div><div class="af"><span class="afk">DIVISION</span><span class="afv"><span class="rx">███████</span></span></div><div class="af"><span class="afk">STATUS</span><span class="afv"><span class="ab">EXPERIMENTAL</span></span></div></div>
+    </div>
+    </div>
+    <hr class="dv">
+    <div class="sec">
+    <div class="slabel">SURVEILLANCE & INTERCEPTION SYSTEMS</div>
+    <p style="font-size:11px;color:var(--t2);line-height:1.7;max-width:680px;margin-bottom:1.25rem;">R.E.C. maintains a proprietary signals intelligence infrastructure operating entirely independently of national and international systems. Coverage range and interception methodology are not disclosed.</p>
+    <div class="g3">
+    <div class="card"><div style="font-size:9px;letter-spacing:.18em;color:var(--cyand);margin-bottom:.35rem;">REC-SUR-01</div><div style="font-size:12px;color:var(--t);margin-bottom:.5rem;">ECLIPSE NETWORK</div><div class="af"><span class="afk">TYPE</span><span class="afv">Signals Intelligence</span></div><div class="af"><span class="afk">COVERAGE</span><span class="afv"><span class="rx">██████████████</span></span></div><div class="af"><span class="afk">SPECS</span><span class="afv"><span class="cb">CLASSIFIED</span></span></div></div>
+    <div class="card"><div style="font-size:9px;letter-spacing:.18em;color:var(--cyand);margin-bottom:.35rem;">REC-SUR-03</div><div style="font-size:12px;color:var(--t);margin-bottom:.5rem;">VEIL INTERCEPT</div><div class="af"><span class="afk">TYPE</span><span class="afv">Digital Interception</span></div><div class="af"><span class="afk">LATENCY</span><span class="afv"><span class="rx">███</span>ms</span></div><div class="af"><span class="afk">SPECS</span><span class="afv"><span class="cb">CLASSIFIED</span></span></div></div>
+    <div class="card"><div style="font-size:9px;letter-spacing:.18em;color:var(--cyand);margin-bottom:.35rem;">REC-SUR-07</div><div style="font-size:12px;color:var(--t);margin-bottom:.5rem;">Digital Confisc-Array</div><div class="af"><span class="afk">TYPE</span><span class="afv">Field Reconeissance</span></div><div class="af"><span class="afk">RANGE</span><span class="afv"><span class="rx">████████</span></span></div><div class="af"><span class="afk">SPECS</span><span class="afv"><span class="cb">CLASSIFIED</span></span></div></div>
+    </div>
+    </div>
+    <hr class="dv">
+    <div class="card" style="border-color:var(--red);">
+    <div style="font-size:9px;letter-spacing:.18em;color:var(--red);margin-bottom:.85rem;">⚠ THIS SECTION REQUIRES ELEVATED CLEARANCE BEYOND STANDARD</div>
+    <p style="font-size:11px;color:var(--t2);line-height:1.75;margin-bottom:.75rem;">The Essenced Research Division operates on principles that fall outside conventional scientific frameworks. Research pertaining to <span class="rx">█████████████████████</span>, <span class="rx">████████████████</span>, and dimensional <span class="rx">██████████</span> is conducted within isolated laboratory environments not listed in this registry.</p>
+    <p style="font-size:11px;color:var(--t2);line-height:1.75;">Equipment catalogues for this division: <span class="rx">█████████████████████████████████████████████████████████████████████████████</span>.</p>
+    <div style="margin-top:.85rem;font-size:9px;color:var(--t3);letter-spacing:.08em;">CONTACT SCIENCE DIVISION LEAD FOR CLEARANCE ELEVATION · UNAUTHORIZED INQUIRY WILL BE FLAGGED</div>
+    </div>
+    </div>`,
+
+    lore:()=>`
+    <div class="page">
+    <div class="ph"><div class="pey">// DOCUMENT CLASS: HISTORICAL RECORD · CLEARANCE: STANDARD</div><div class="ptitle">INSTITUTIONAL HISTORY</div><div class="psub">Partial record. Pre-foundation entries are restricted or deliberately incomplete.</div></div>
+    <div class="sec">
+    <div class="slabel">ORIGIN NOTE</div>
+    <div class="card" style="border-left:3px solid var(--C);">
+    <p style="font-size:11px;color:var(--t2);line-height:1.85;">The early history of R.E.C. remains a matter of internal debate. Publicly, the institution did not exist prior to <span class="rx">████</span>. Several external researchers have alleged connections between the Corporation's founding figures and <span class="rx">████████████████████████</span>. These claims are neither confirmed nor denied by this office. Director Beaumont has declined to comment on the subject in all documented instances.</p>
+    </div>
+    </div>
+    <hr class="dv">
+    <div class="sec">
+    <div class="slabel">TIMELINE (PARTIAL)</div>
+    <div class="tli"><div class="tly"><span class="rx">████</span></div><div class="tlb"><div class="tlt"><span class="rx">████████████████████████████████████████</span></div><div class="tld"><span class="cb">CLASSIFIED · OMEGA CLEARANCE REQUIRED</span></div></div></div>
+    <div class="tli"><div class="tly"><span class="rx">████</span></div><div class="tlb"><div class="tlt"><span class="rx">████████████████████████████████</span></div><div class="tld"><span class="cb">CLASSIFIED · OMEGA CLEARANCE REQUIRED</span></div></div></div>
+    <div class="tli"><div class="tly">2025</div><div class="tlb"><div class="tlt">FORMAL ESTABLISHMENT OF R.E.C.</div><div class="tld">RiggerTech Essenced Corporation formally established in Paris, France. Director Riggers Beaumont appointed as founding Director. Inaugural personnel intake: <span class="rx">███</span>. Charter filed under <span class="rx">███████████████████</span>.</div></div></div>
+    <div class="tli"><div class="tly">2031</div><div class="tlb"><div class="tlt">ESTABLISHMENT OF THE SCIENCE DIVISION</div><div class="tld">A dedicated research arm was authorized following an internal incident in <span class="rx">████████</span>. Several personnel with non-standard documented capabilities were formally integrated. Nature of early research: <span class="rx">████████████████████████</span>.</div></div></div>
+    <div class="tli"><div class="tly">2033</div><div class="tlb"><div class="tlt">FRONTLINE DIVISION FORMALIZED</div><div class="tld">Rapid expansion of field operations necessitated a dedicated ground division. The Frontline structure, including the Captain and Agent hierarchy, was formally established. First Captains appointed: <span class="rx">████████████████████████████████</span>.</div></div></div>
+    <div class="tli"><div class="tly">2034</div><div class="tlb"><div class="tlt">TERROR-HUNTER MANDATE ISSUED</div><div class="tld">In response to a sustained increase in organized contract violence, Director Beaumont authorized the Terror-Hunter division. Classification of internal threat models from this period: <span class="rx">██████████████</span>.</div></div></div>
+    <div class="tli"><div class="tly">2039</div><div class="tlb"><div class="tlt"><span class="rx">████████████████████████████</span></div><div class="tld"><span class="rx">████████████████████████████████████████████████████████████████████████████</span></div></div></div>
+    <div class="tli"><div class="tly">2042</div><div class="tlb"><div class="tlt">CURRENT OPERATIONAL PERIOD</div><div class="tld">R.E.C. continues to expand its operational and research capacity. Threat landscape assessed as <span style="color:var(--amber)">C</span>. All divisions fully active. Recruitment is open.</div></div></div>
+    </div>
+    </div>`,
+
+    recruitment:()=>`
+    <div class="page">
+    <div class="ph"><div class="pey">// DOCUMENT CLASS: RECRUITMENT · CLEARANCE: PUBLIC</div><div class="ptitle">JOIN R.E.C.</div><div class="psub">We do not seek the ordinary. We seek those who cannot explain what they are.</div></div>
+    <div class="sec">
+    <div class="slabel">A NOTE ON RECRUITMENT</div>
+    <p style="font-size:12px;color:var(--t2);line-height:1.9;max-width:700px;">R.E.C. does not advertise. You are reading this because something directed you here — or because you have been observed for some time and a decision is already forming. Either way, we welcome the inquiry. Proceed honestly. We already know more than you assume.</p>
+    </div>
+    <hr class="dv">
+    <div class="sec">
+    <div class="slabel">OPEN DIVISIONS</div>
+    <div class="g2">
+    <div class="card"><div style="color:var(--cyan);font-size:10px;letter-spacing:.2em;margin-bottom:.45rem;">▲ TERROR-HUNTERS</div><p style="font-size:11px;color:var(--t2);line-height:1.7;margin-bottom:.6rem;">Elite pursuit operatives. Requirements: exceptional combat aptitude, stress tolerance above 97th percentile, psychological self-sufficiency. Must be willing to operate in total information blackout for extended durations.</p><div style="font-size:9px;color:var(--t3);letter-spacing:.08em;">POSITIONS: AGENT (ACTIVE INTAKE) · CAPTAIN (INVITATION ONLY)</div></div>
+    <div class="card"><div style="color:var(--cyan);font-size:10px;letter-spacing:.2em;margin-bottom:.45rem;">◼ FRONTLINE</div><p style="font-size:11px;color:var(--t2);line-height:1.7;margin-bottom:.6rem;">Backbone personnel. Diverse combat and non-combat roles: direct field engagement, civilian crowd management, tactical response, protective escort. Prior experience preferred but not mandatory where capability is demonstrable.</p><div style="font-size:9px;color:var(--t3);letter-spacing:.08em;">POSITIONS: AGENT (ACTIVE INTAKE) · SPECIALIST (REFERRAL)</div></div>
+    <div class="card"><div style="color:var(--cyan);font-size:10px;letter-spacing:.2em;margin-bottom:.45rem;">◈ SCIENCE DIVISION</div><p style="font-size:11px;color:var(--t2);line-height:1.7;margin-bottom:.6rem;">Conventional fields: materials science, forensics, biochemistry, engineering. Unconventional fields: <span class="rx">████████████████████████</span>. Those with unexplained personal phenomena are particularly encouraged to apply.</p><div style="font-size:9px;color:var(--t3);letter-spacing:.08em;">POSITIONS: RESEARCHER · SENIOR ANALYST · <span class="rx">██████████</span></div></div>
+    <div class="card"><div style="color:var(--cyan);font-size:10px;letter-spacing:.2em;margin-bottom:.45rem;">✦ MEDICAL & SUPPORT</div><p style="font-size:11px;color:var(--t2);line-height:1.7;margin-bottom:.6rem;">Qualified medical professionals and institutional support staff. Discretion is a requirement equivalent to field capability. You will see things. You will not speak of them.</p><div style="font-size:9px;color:var(--t3);letter-spacing:.08em;">POSITIONS: FIELD MEDIC · PHYSICIAN · ADMINISTRATIVE STAFF</div></div>
+    <div class="card"><div style="color:var(--cyan);font-size:10px;letter-spacing:.2em;margin-bottom:.45rem;">◎ DETECTIVE BRANCH</div><p style="font-size:11px;color:var(--t2);line-height:1.7;margin-bottom:.6rem;">Investigators, forensic specialists, and behavioral analysts. An eye for truth in conditions designed to conceal it. Prior investigative experience is an asset. Disillusionment with existing institutions is not a disqualifier — often quite the opposite.</p><div style="font-size:9px;color:var(--t3);letter-spacing:.08em;">POSITIONS: DETECTIVE · FORENSIC SPECIALIST · FIELD ANALYST</div></div>
+    </div>
+    </div>
+    <hr class="dv">
+    <div class="sec">
+    <div class="slabel">INITIATE APPLICATION</div>
+    <div class="card">
+    <div style="font-size:9px;color:var(--red);letter-spacing:.12em;margin-bottom:1rem;">⚠ ALL SUBMISSIONS ARE FINAL. FALSE INFORMATION WILL BE DETECTED AND FLAGGED.</div>
+    <label>FULL LEGAL NAME</label><input type="text" placeholder="As documented."/>
+    <label>DIVISION OF INTEREST</label>
+    <select><option value="">— SELECT —</option><option>Terror-Hunters</option><option>Frontline</option><option>Science Division</option><option>Detective Branch</option><option>Medical & Support</option><option>Unspecified / Assessor discretion</option></select>
+    <label>KNOWN CAPABILITIES OR SPECIALIZATIONS</label><textarea placeholder="Be complete. Omission is noted." style="height:85px;resize:none;"></textarea>
+    <label>HOW DID YOU BECOME AWARE OF R.E.C.?</label><textarea placeholder="Answer carefully." style="height:55px;resize:none;"></textarea>
+    <div style="margin-top:.35rem;"><div class="btn" onclick="this.textContent='TRANSMISSION RECEIVED';this.style.borderColor='var(--green)';this.style.color='var(--green)';">SUBMIT TRANSMISSION</div></div>
+    <div style="margin-top:.9rem;font-size:9px;color:var(--t3);letter-spacing:.07em;line-height:1.7;">By submitting, you consent to an extended background review, psychological assessment, and ongoing monitoring. R.E.C. reserves the right to initiate contact through any channel it deems appropriate.</div>
+    </div>
+    </div>
+    </div>`,
+
+    contact:()=>`
+    <div class="page">
+    <div class="ph"><div class="pey">// DOCUMENT CLASS: COMMS HUB · CLEARANCE: PUBLIC</div><div class="ptitle">CONTACT</div><div class="psub">All transmissions are encrypted, monitored, and logged indefinitely.</div></div>
+    <div class="sec">
+    <div class="card" style="border-color:var(--C);margin-bottom:1.5rem;">
+    <div style="font-size:9px;color:var(--C);letter-spacing:.18em;margin-bottom:.45rem;">⚠ COMMUNICATION ADVISORY</div>
+    <p style="font-size:11px;color:var(--t2);line-height:1.75;">This channel is not anonymous. Your transmission origin, device signature, and identity — if known to us — are logged upon initiation of contact. Do not transmit information you are not authorized to share. R.E.C. is not responsible for consequences arising from voluntary disclosure.</p>
+    </div>
+    <div class="g2" style="margin-bottom:1.5rem;">
+    <div class="card"><div style="font-size:9px;letter-spacing:.18em;color:var(--t3);margin-bottom:.35rem;">CENTRAL COMMAND</div><div style="font-size:12px;color:var(--t);margin-bottom:.45rem;">PARIS HEADQUARTERS</div><div class="af"><span class="afk">ADDRESS</span><span class="afv"><span class="rx">████████████████████████</span></span></div><div class="af"><span class="afk">SECURE LINE</span><span class="afv"><span class="rx">+33 ██ ████ ████</span></span></div><div class="af"><span class="afk">HOURS</span><span class="afv">CONTINUOUS · 24/7</span></div></div>
+    <div class="card"><div style="font-size:9px;letter-spacing:.18em;color:var(--t3);margin-bottom:.35rem;">ENCRYPTED CHANNELS</div><div style="font-size:12px;color:var(--t);margin-bottom:.45rem;">CLASSIFIED COMMS</div><div class="af"><span class="afk">PROTOCOL</span><span class="afv"><span class="rx">████████</span>-CIPHER</span></div><div class="af"><span class="afk">KEY EXCHANGE</span><span class="afv">Authorized request only</span></div><div class="af"><span class="afk">INTERNAL</span><span class="afv"><span class="cb">PERSONNEL ONLY</span></span></div></div>
+    </div>
+    <div class="slabel">SECURE MESSAGE FORM</div>
+    <div class="card">
+    <label>SENDER DESIGNATION (NAME OR CODENAME)</label><input id="identifier" type="text" placeholder="Your identifier."/>
+    <label>TRANSMISSION RETURN ADDRESS (EMAIL)</label><input id="rec-email" type="email" placeholder="Your address. A confirmation will be dispatched."/>
+    <label>PURPOSE OF CONTACT</label>
+    <select id="rec-purpose"><option value="">— SELECT CATEGORY —</option><option>Threat Intelligence Report</option><option>Recruitment Inquiry</option><option>Media / External Relations</option><option>Inter-Agency Liaison</option><option>Incident Report</option><option>Other</option></select>
+    <label>MESSAGE</label><textarea id="rec-message" placeholder="State your purpose clearly. Encryption is automatic." style="height:95px;resize:none;"></textarea>
+    <div id="rec-send-status" style="font-size:10px;letter-spacing:.1em;margin-top:.5rem;min-height:16px;"></div>
+    <div style="margin-top:.35rem;"><div class="btn" id="rec-send-btn" onclick="recSendTransmission()">TRANSMIT SECURELY</div></div>
+    <div style="margin-top:.9rem;font-size:9px;color:var(--t3);letter-spacing:.07em;line-height:1.7;">If a return address is provided, R.E.C. Central Command will dispatch an encrypted acknowledgment. You are already being monitored.</div>
+    </div>
+    </div>
+    </div>`,
+
+    personnel:()=>`
+    <div class="page">
+    <div class="ph"><div class="pey">// DOCUMENT CLASS: PERSONNEL · CLEARANCE: PROTOCOL-7 RESTRICTED</div><div class="ptitle">PERSONNEL REGISTRY</div><div class="psub">Access logged. This document is not indexed or linked from standard navigation.</div></div>
+    <div class="card" style="border-color:var(--red);margin-bottom:2rem;">
+    <div style="font-size:9px;color:var(--red);letter-spacing:.18em;margin-bottom:.45rem;">⚠ RESTRICTED ACCESS — PROTOCOL-7 · SESSION RECORDED</div>
+    <p style="font-size:11px;color:var(--t2);line-height:1.75;">You have accessed a restricted personnel file. Your credentials and session data have been recorded. Unauthorized review of personnel files is a serious institutional breach. If you have reached this page in error, exit immediately and report via the contact channel.</p>
+    </div>
+
+    <div class="sec">
+    <div class="slabel">FRONTLINE DIVISION</div>
+    <div class="acard">
+    <div class="aid">REC-FL-002 · FRONTLINE DIVISION</div>
+    <div class="aname">DEZEN RACHMANINOFF</div>
+    <hr class="adv">
+    <div class="af"><span class="afk">STATUS</span><span class="afv"><span class="sb">ACTIVE</span></span></div>
+    <div class="af"><span class="afk">RANK</span><span class="afv">Captain · Frontline</span></div>
+    <div class="af"><span class="afk">NATIONALITY</span><span class="afv">Russian</span></div>
+    <div class="af"><span class="afk">SPECIALTY</span><span class="afv">Manifested spectral appendages — two large-scale detached ghost hands, operable at range. Mid-range combat specialist. Composed command performance consistently rated outstanding under live fire.</span></div>
+    <div class="af"><span class="afk">ASSESSMENT</span><span class="afv">One of the division's most dependable Captains. High operational trust. Psychological note: <span style="color:var(--red);">DO NOT REFERENCE OR INQUIRE ABOUT "VOICES." FLAGGED PER STANDING MEDICAL DIRECTIVE. NON-NEGOTIABLE.</span></span></div>
+    </div>
+    <div class="acard">
+    <div class="aid">REC-FL-003 · FRONTLINE DIVISION</div>
+    <div class="aname">COCRYA DYCORD</div>
+    <hr class="adv">
+    <div class="af"><span class="afk">STATUS</span><span class="afv"><span class="sb">ACTIVE</span></span></div>
+    <div class="af"><span class="afk">RANK</span><span class="afv">Captain · Frontline</span></div>
+    <div class="af"><span class="afk">NATIONALITY</span><span class="afv">American</span></div>
+    <div class="af"><span class="afk">SPECIALTY</span><span class="afv">Physical deconstruction — capable of reducing her body to an unidentified material resembling flexible, multi-chromatic shards of glass. Science Division current hypothesis: physical manifestation of Essenced soul/Essence untethering. Hypothesis status: <span class="ab">UNCONFIRMED</span>.</span></div>
+    <div class="af"><span class="afk">ASSESSMENT</span><span class="afv">Field performance: exceptional. Capability creates pronounced tactical unpredictability in her favor. Psychological stability: within acceptable operational range.</span></div>
+    </div>
+    <div class="acard">
+    <div class="aid">REC-FL-004 · FRONTLINE DIVISION</div>
+    <div class="aname">BECHIRI UZURETH</div>
+    <hr class="adv">
+    <div class="af"><span class="afk">STATUS</span><span class="afv"><span class="sb">ACTIVE</span></span></div>
+    <div class="af"><span class="afk">RANK</span><span class="afv">Agent · Captain-Track</span></div>
+    <div class="af"><span class="afk">DIVISION</span><span class="afv">Frontline</span></div>
+    <div class="af"><span class="afk">SPECIALTY</span><span class="afv">Multi-discipline combat. Dozens of documented styles and weapons systems. Primary instrument: high-tech multi-use staff (designation REC-WEP-<span class="rx">███</span>). Adaptability index: exceptional.</span></div>
+    <div class="af"><span class="afk">ASSESSMENT</span><span class="afv">Exceptional field performance. Rapid advancement trajectory noted. Leadership capability: confirmed. Captain promotion under active review.</span></div>
+    </div>
+    <div class="acard">
+    <div class="aid">REC-FL-011 · FRONTLINE DIVISION</div>
+    <div class="aname">AYLIND DRIKUR</div>
+    <hr class="adv">
+    <div class="af"><span class="afk">STATUS</span><span class="afv"><span class="ab">PROBATIONARY</span></span></div>
+    <div class="af"><span class="afk">RANK</span><span class="afv">Agent · Novice</span></div>
+    <div class="af"><span class="afk">DIVISION</span><span class="afv">Frontline</span></div>
+    <div class="af"><span class="afk">SPECIALTY</span><span class="afv">Atmospheric electrical discharge. Capability manifests from both body and ambient sky conditions. Classified under Essenced sub-type: <span class="rx">████████████</span>. Destructive ceiling: unconfirmed.</span></div>
+    <div class="af"><span class="afk">NOTE</span><span class="afv" style="color:var(--red);">Origin and prior history: DO NOT INQUIRE. FILE SEALED BY DIRECTOR ORDER. Violation of this directive will result in immediate disciplinary review.</span></div>
+    </div>
+    <div class="acard">
+    <div class="aid">REC-FL-019 · FRONTLINE DIVISION</div>
+    <div class="aname">MALEK "MOUSE" MOUNTAIN</div>
+    <hr class="adv">
+    <div class="af"><span class="afk">STATUS</span><span class="afv"><span class="sb">ACTIVE</span></span></div>
+    <div class="af"><span class="afk">RANK</span><span class="afv">Agent · Recruit</span></div>
+    <div class="af"><span class="afk">ASSESSMENT</span><span class="afv">Entered service displaying hesitation during live engagements. Continued deployments show growing confidence, initiative and resilience. Supervisors report steady development into a dependable frontline operative.</span></div>
+    </div>
+    <div class="acard">
+    <div class="aid">REC-FL-<span class="rx">███</span> · FRONTLINE DIVISION</div>
+    <div class="aname">BARZYLIOS <span class="rx">███████</span></div>
+    <hr class="adv">
+    <div class="af"><span class="afk">STATUS</span><span class="afv"><span class="cb">CLASSIFIED</span></span></div>
+    <div class="af"><span class="afk">RANK</span><span class="afv"><span class="rx">████████████████</span></span></div>
+    <div class="af"><span class="afk">SPECIALTY</span><span class="afv"><span class="rx">████████████████████████████████████████████████████████████████</span></span></div>
+    <div class="af"><span class="afk">NOTE</span><span class="afv"><span class="rx">█████████████████████████████████████████████████████████████████████</span></span></div>
+    <div class="wbox">THIS ENTRY REQUIRES OMEGA CLEARANCE. ACCESS ATTEMPT HAS BEEN LOGGED.</div>
+    </div>
+    </div>
+
+    <div class="sec">
+    <div class="slabel">TERROR-HUNTER DIVISION</div>
+    <div class="acard">
+    <div class="aid">REC-TH-001 · TERROR-HUNTERS</div>
+    <div class="aname">WARFARE</div>
+    <hr class="adv">
+    <div class="af"><span class="afk">LEGAL NAME</span><span class="afv">Ozymandyaz Parabell</span></div>
+    <div class="af"><span class="afk">RANK</span><span class="afv">Captain</span></div>
+    <div class="af"><span class="afk">BACKGROUND</span><span class="afv">Former Kafrian HellHound soldier.</span></div>
+    <div class="af"><span class="afk">SUSHTINA</span><span class="afv">Capable of preventing actions from occurring through verbal invocation.</span></div>
+    <div class="af"><span class="afk">ASSESSMENT</span><span class="afv">The most effective, brutal and unrelenting Terror-Hunter captain in the agency's history. Past has long been overlooked due to decade-old efficiency.</span></div>
+    </div>
+    <div class="acard">
+    <div class="aid">REC-TH-014 · TERROR-HUNTERS</div>
+    <div class="aname">BLACKJAW</div>
+    <hr class="adv">
+    <div class="af"><span class="afk">LEGAL NAME</span><span class="afv">Yul Merromenoi</span></div>
+    <div class="af"><span class="afk">BACKGROUND</span><span class="afv">Former Escuadron recruit from a rebellious tribal movement.</span></div>
+    <div class="af"><span class="afk">SUSHTINA</span><span class="afv">Rapid mathematical acceleration of speed; difficult to control.</span></div>
+    <div class="af"><span class="afk">ASSESSMENT</span><span class="afv">Though doubted at first, Blackjaw has shown to be a remarkable asset to the Terror Hunter division. His jaw is a REC-invented prosthetic, capable of surviving sniper bullets. Synthetic flesh covers it.[cite: 2]</span></div>
+    </div>
+    <div class="acard">
+    <div class="aid">REC-TH-022 · TERROR-HUNTERS</div>
+    <div class="aname">SNOWSHARK</div>
+    <hr class="adv">
+    <div class="af"><span class="afk">LEGAL NAME</span><span class="afv">Tsufo (C.F., in some cases)</span></div>
+    <div class="af"><span class="afk">BACKGROUND</span><span class="afv">Former Europan cradle instrument, recruited personally by the Riggers.</span></div>
+    <div class="af"><span class="afk">SUSHTINA</span><span class="afv">Can pinpoint a hitbox of his choosing anywhere he can see, allowing him to interact with objects as if they were in his grasp.</span></div>
+    <div class="af"><span class="afk">ASSESSMENT</span><span class="afv">Extremely and almost freakishly loyal, honest and determined. A quiet, somewhat strange presence, but fair and understanding. Despite this, he is one of the most terrifying fighters in the agency.</span></div>
+    </div>
+
+    <div class="sec">
+    <div class="slabel">DETECTIVE BRANCH · INTERNAL INVESTIGATIONS</div>
+    <div class="acard">
+    <div class="aid">REC-DB-001 · DETECTIVE BRANCH</div>
+    <div class="aname">DEAN ALATORRE</div>
+    <hr class="adv">
+    <div class="af"><span class="afk">ROLE</span><span class="afv">Senior Detective</span></div>
+    <div class="af"><span class="afk">BACKGROUND</span><span class="afv">Former Napoli detective who left after becoming disillusioned with corruption.</span></div>
+    <div class="af"><span class="afk">ASSESSMENT</span><span class="afv">Exceptional talent for reading people, motives, and deception.</span></div>
+    </div>
+    <div class="acard">
+    <div class="aid">REC-DB-003 · DETECTIVE BRANCH</div>
+    <div class="aname">RENATTA ALATORRE</div>
+    <hr class="adv">
+    <div class="af"><span class="afk">ROLE</span><span class="afv">Forensic Scientist · Detective Consultant</span></div>
+    <div class="af"><span class="afk">NOTE</span><span class="afv">Frequently accompanies Dean Alatorre on major investigations.</span></div>
+    </div>
+    <div class="acard">
+    <div class="aid">REC-DB-███ · DETECTIVE BRANCH</div>
+    <div class="aname">&nbsp;</div>
+    <hr class="adv">
+    </div>
+    </div>
+
+    <div class="sec">
+    <div class="slabel">SCIENCE DIVISION · RESEARCH PERSONNEL</div>
+    <div class="acard omega">
+    <div class="aid">REC-SCI-001 · SCIENCE DIVISION</div>
+    <div class="aname">DAVID SLOSKRA</div>
+    <hr class="adv">
+    <div class="af"><span class="afk">ROLE</span><span class="afv">Lead Researcher</span></div>
+    <div class="af"><span class="afk">CLEARANCE</span><span class="afv"><span class="cb">LEVEL 10 · OMEGA</span></span></div>
+    <div class="af"><span class="afk">STATUS</span><span class="afv"><span class="sb">ACTIVE</span></span></div>
+    <div class="wbox">DOSSIER DETAILS CLASSIFIED BEYOND THIS POINT.</div>
+    </div>
+    </div>
+
+    <div class="card" style="border-color:var(--red);">
+    <div style="font-size:11px;color:var(--t2);line-height:1.75;">You cannot proceed further than this without special authorization. Remaining personnel entries require OMEGA-level clearance or direct approval from the Director's office. Contact Paris Central Command if you believe you have grounds for elevated access.</div>
+    </div>
+    </div>`,
+
+
+    deadoldworld:()=>`
+    <div class="dow-page">
+
+    <div class="dow-ph">
+        <div class="dow-eyebrow-page">// ARCHIVE NODE · DEADOLDWORLD · STATUS: SEALED · RECOVERED · UNINDEXED</div>
+        <div class="dow-ptitle">THE GENTLEMEN</div>
+        <div class="dow-psub">Recovered transmissions from a former organization. Not present in official R.E.C. databases. Provenance: classified.</div>
+        <div><span class="dow-omega-badge">Ω OMEGA CLEARANCE · ACCESS VERIFIED</span><span class="dow-stamp">DEFUNCT</span></div>
+    </div>
+
+    <div class="dow-note-box">
+        <strong style="color:#8a6010;letter-spacing:.15em;font-size:9px;">ARCHIVIST'S NOTE — CLEARANCE: OMEGA</strong><br><br>
+        The following transmissions were recovered from decommissioned relay hardware during a sweep of <span style="background:#c8940a;color:transparent;user-select:none;border-radius:1px;display:inline-block;opacity:.18;">████████████████</span> in <span style="background:#c8940a;color:transparent;user-select:none;border-radius:1px;display:inline-block;opacity:.18;">██████</span>. The organization referred to informally as <em style="color:#8a6010;">"The Gentlemen"</em> dissolved or was dissolved prior to the R.E.C.'s formal establishment. No surviving membership roster exists in verified records. These messages are reproduced exactly as intercepted — no editorial intervention.
+        <br><br>
+        <span style="color:#3a2808;font-size:9px;letter-spacing:.1em;">DISTRIBUTION: OMEGA ONLY · DO NOT FORWARD · DO NOT COPY · DO NOT REFERENCE IN OFFICIAL CORRESPONDENCE</span>
+    </div>
+
+    <div class="dow-section-label">RECOVERED TRANSMISSIONS · CHRONOLOGICAL INDEX</div>
+
+    <div class="dow-msg">
+        <div class="dow-msg-header">
+            <span class="dow-msg-from">GREYSH</span>
+            <span class="dow-msg-arrow">→</span>
+            <span class="dow-msg-to">HAMZAH</span>
+            <span class="dow-msg-tag">PERSONAL</span>
+            <span class="dow-msg-date">12 JAN 2022 · 03:41 LOCAL</span>
+        </div>
+        <div class="dow-msg-body">
+            I'm getting acceptable feedback from the echo preventer installed. No tracks. Small heat signature, I guess.<br><br>
+            Deliver pretzels. <em>I miss eating salty food.</em>
+        </div>
+        <div class="dow-msg-footer">RELAY: <span style="background:#c8940a;color:transparent;user-select:none;border-radius:1px;display:inline-block;opacity:.18;">████████</span> · DECRYPT STATUS: COMPLETE · INTEGRITY: 97%</div>
+    </div>
+
+    <div class="dow-msg">
+        <div class="dow-msg-header">
+            <span class="dow-msg-from">KAFRIA</span>
+            <span class="dow-msg-arrow">→</span>
+            <span class="dow-msg-to">LON</span>
+            <span class="dow-msg-tag">OPERATIONAL</span>
+            <span class="dow-msg-date">28 FEB 2020 · 19:07 LOCAL</span>
+        </div>
+        <div class="dow-msg-body">
+            Signal source located <em>61 km</em> from previous estimate according to Hamzah. I'm pretty sure these guys think we'll bite.<br><br>
+            Adrian is recommending someone, by the way. That means you have to attend this meeting — no excuses. <em>I'm expecting a shit case.</em>
+        </div>
+        <div class="dow-msg-footer">RELAY: <span style="background:#c8940a;color:transparent;user-select:none;border-radius:1px;display:inline-block;opacity:.18;">████████</span> · DECRYPT STATUS: COMPLETE · INTEGRITY: 100%</div>
+    </div>
+
+    <div class="dow-msg">
+        <div class="dow-msg-header">
+            <span class="dow-msg-from">GREYSH</span>
+            <span class="dow-msg-arrow">→</span>
+            <span class="dow-msg-to">HAMZAH</span>
+            <span class="dow-msg-tag">TECHNICAL</span>
+            <span class="dow-msg-date">03 AUG 2024 · 11:22 LOCAL</span>
+        </div>
+        <div class="dow-msg-body">
+            I can't figure this out. Did you send me rusty pipes for material or something? My suppressor tech is behaving like a <em>fucking moron</em>.
+        </div>
+        <div class="dow-msg-footer">RELAY: <span style="background:#c8940a;color:transparent;user-select:none;border-radius:1px;display:inline-block;opacity:.18;">████████</span> · DECRYPT STATUS: COMPLETE · INTEGRITY: 89% · <span style="color:#5a2808;">2 FRAGMENTS UNRECOVERED</span></div>
+    </div>
+
+    <div class="dow-msg" style="border-left-color:#6a1a1a;">
+        <div class="dow-msg-header">
+            <span class="dow-msg-from">GREYSH</span>
+            <span class="dow-msg-arrow">→</span>
+            <span class="dow-msg-to">HAMZAH</span>
+            <span class="dow-msg-tag" style="border-color:#6a1a1a;color:#6a1a1a;">URGENT</span>
+            <span class="dow-msg-date">14 JUN 2027 · 00:03 LOCAL</span>
+        </div>
+        <div class="dow-msg-body" style="color:#7a5040;">
+            Jerry is dead.
+        </div>
+        <div class="dow-msg-footer" style="color:#4a2a1a;">RELAY: <span style="background:#c8940a;color:transparent;user-select:none;border-radius:1px;display:inline-block;opacity:.18;">████████</span> · DECRYPT STATUS: COMPLETE · INTEGRITY: 100% · <span style="color:#6a2020;">FLAGGED: PERSONNEL LOSS</span></div>
+    </div>
+
+    <div class="dow-section-label">ADDITIONAL RECOVERED FRAGMENTS · PARTIAL INTEGRITY</div>
+
+    <div class="dow-msg" style="opacity:.75;">
+        <div class="dow-msg-header">
+            <span class="dow-msg-from"><span style="background:#c8940a;color:transparent;user-select:none;border-radius:1px;display:inline-block;opacity:.18;">███████</span></span>
+            <span class="dow-msg-arrow">→</span>
+            <span class="dow-msg-to">GREYSH</span>
+            <span class="dow-msg-tag">FRAGMENT</span>
+            <span class="dow-msg-date"><span style="background:#c8940a;color:transparent;user-select:none;border-radius:1px;display:inline-block;opacity:.18;">████████████</span></span>
+        </div>
+        <div class="dow-msg-body">
+            <span style="background:#c8940a;color:transparent;user-select:none;border-radius:1px;display:inline-block;opacity:.18;">███████████████████████████████████████</span> the arrangement was never supposed to outlast the <span style="background:#c8940a;color:transparent;user-select:none;border-radius:1px;display:inline-block;opacity:.18;">████████████</span>. Gentlemen don't <em>linger</em>. We agreed on that much.
+        </div>
+        <div class="dow-msg-footer">RELAY: UNKNOWN · DECRYPT STATUS: <span style="color:#5a2808;">PARTIAL — 41% RECOVERED</span> · INTEGRITY: 41%</div>
+    </div>
+
+    <div class="dow-msg" style="opacity:.6;">
+        <div class="dow-msg-header">
+            <span class="dow-msg-from">YUSUF</span>
+            <span class="dow-msg-arrow">→</span>
+            <span class="dow-msg-to"><span style="background:#c8940a;color:transparent;user-select:none;border-radius:1px;display:inline-block;opacity:.18;">███</span></span>
+            <span class="dow-msg-tag">FRAGMENT</span>
+            <span class="dow-msg-date"><span style="background:#c8940a;color:transparent;user-select:none;border-radius:1px;display:inline-block;opacity:.18;">████████████</span></span>
+        </div>
+        <div class="dow-msg-body">
+            <span style="background:#c8940a;color:transparent;user-select:none;border-radius:1px;display:inline-block;opacity:.18;">████████████████████████████████████████████████████</span><br>
+            <span style="background:#c8940a;color:transparent;user-select:none;border-radius:1px;display:inline-block;opacity:.18;">█████████████████</span> i cant bring myself to look at lon. i know he keeps seeing her face over and over. i feel sick.</em>
+        </div>
+        <div class="dow-msg-footer">RELAY: UNKNOWN · DECRYPT STATUS: <span style="color:#5a2808;">PARTIAL — 23% RECOVERED</span> · INTEGRITY: 23%</div>
+    </div>
+
+    <div class="dow-footer-bar">
+        <span>DEADOLDWORLD · ARCHIVE NODE · SEALED <span style="background:#c8940a;color:transparent;user-select:none;border-radius:1px;display:inline-block;opacity:.18;">████████</span></span>
+        <span>Ω OMEGA · THIS SESSION IS LOGGED</span>
+        <span style="cursor:pointer;color:#3a2808;" onclick="document.getElementById('rec-app').classList.remove('dow-active');nav('home');">[ CLOSE ARCHIVE ]</span>
+    </div>
+
+    </div>`,
+
+    };
+
+    /* ═══════════════════════════════════
+       DEADOLDWORLD · OMEGA GATE LOGIC
+       ═══════════════════════════════════ */
+    const DOW_PASSPHRASE = 'GENTLEMEN';
+    let dowAttempts = 3;
+
+    function dowOpen() {
+        // Reset state
+        dowAttempts = 3;
+        document.getElementById('dow-attempts-left').textContent = '3 ATTEMPTS REMAINING';
+        document.getElementById('dow-pass-err').textContent = '';
+        const inp = document.getElementById('dow-passphrase');
+        if (inp) { inp.value = ''; inp.classList.remove('error'); }
+        // Show step 1
+        document.querySelectorAll('.dow-warn-step').forEach(el => el.classList.remove('active'));
+        document.getElementById('dow-step-1').classList.add('active');
+        // Show overlay
+        const ov = document.getElementById('dow-overlay');
+        ov.classList.remove('hidden');
+        ov.style.opacity = '0';
+        requestAnimationFrame(() => {
+            ov.style.transition = 'opacity .35s ease';
+            ov.style.opacity = '1';
+        });
+    }
+
+    function dowStep(n) {
+        document.querySelectorAll('.dow-warn-step').forEach(el => el.classList.remove('active'));
+        document.getElementById('dow-step-' + n).classList.add('active');
+        if (n === 3) {
+            setTimeout(() => {
+                const inp = document.getElementById('dow-passphrase');
+                if (inp) inp.focus();
+            }, 100);
+        }
+    }
+
+    function dowVerify() {
+        const inp = document.getElementById('dow-passphrase');
+        const errEl = document.getElementById('dow-pass-err');
+        const val = inp.value.trim().toUpperCase();
+        if (val === DOW_PASSPHRASE) {
+            // Success — enter the archive
+            const ov = document.getElementById('dow-overlay');
+            ov.style.transition = 'opacity .4s ease';
+            ov.style.opacity = '0';
+            setTimeout(() => {
+                ov.classList.add('hidden');
+                document.getElementById('rec-app').classList.add('dow-active');
+                nav('deadoldworld');
+            }, 420);
+        } else {
+            dowAttempts--;
+            inp.classList.remove('error');
+            void inp.offsetWidth; // reflow for animation restart
+            inp.classList.add('error');
+            inp.value = '';
+            if (dowAttempts <= 0) {
+                document.querySelectorAll('.dow-warn-step').forEach(el => el.classList.remove('active'));
+                document.getElementById('dow-step-locked').classList.add('active');
+                errEl.textContent = '';
+            } else {
+                errEl.textContent = 'PASSPHRASE INVALID. ' + dowAttempts + ' ATTEMPT' + (dowAttempts === 1 ? '' : 'S') + ' REMAINING.';
+                document.getElementById('dow-attempts-left').textContent = dowAttempts + ' ATTEMPT' + (dowAttempts === 1 ? '' : 'S') + ' REMAINING';
+            }
+            setTimeout(() => inp.classList.remove('error'), 500);
+        }
+    }
+
+    function dowAbort() {
+        const ov = document.getElementById('dow-overlay');
+        ov.style.transition = 'opacity .3s ease';
+        ov.style.opacity = '0';
+        setTimeout(() => ov.classList.add('hidden'), 320);
+    }
+
+    function nav(p){
+    const el=document.getElementById('rec-content');
+    if(!el||!pages[p])return;
+    if(p !== 'deadoldworld') document.getElementById('rec-app').classList.remove('dow-active');
+    el.innerHTML=pages[p]();
+    document.querySelectorAll('.nav-link').forEach(l=>{
+    l.classList.toggle('active',l.dataset.p===p);
+    });
+    document.getElementById('rec-app').scrollTop=0;
+    window.scrollTo(0,0);
+    }
+
+    nav('home');
+
+    /* R.E.C. Secure Database Decryption / Loader Sequence */
+    document.addEventListener("DOMContentLoaded", () => {
+    const loader = document.getElementById("rec-loader");
+    const terminal = document.getElementById("loader-terminal");
+    const bar = document.querySelector(".loader-bar-fill");
+
+    const bootSequence = [
+    { text: "ESTABLISHING SECURE CONNECTION...", progress: 15, delay: 400 },
+    { text: "BYPASSING PUBLIC FIREWALLS...", progress: 30, delay: 800 },
+    { text: "AUTHENTICATING PROTOCOL-7 CLEARANCE...", progress: 45, delay: 1400 },
+    { text: "ACCESSING PARIS CENTRAL COMMAND...", progress: 60, delay: 2000 },
+    { text: "DECRYPTING DECLASSIFIED DOSSIERS...", progress: 85, delay: 2800 },
+    { text: "SYSTEM ACTIVE. WELCOME OPERATIVE.", progress: 100, delay: 3500 }
+    ];
+
+    bootSequence.forEach((step) => {
+    setTimeout(() => {
+    if (terminal) terminal.innerText = step.text;
+    if (bar) bar.style.width = step.progress + "%";
+    if (step.progress === 100 && terminal) {
+    terminal.style.color = "var(--green)";
+    }
+    }, step.delay);
+    });
+
+    setTimeout(() => {
+    if (loader) {
+    loader.style.opacity = "0";
+    loader.style.visibility = "hidden";
+    setTimeout(() => loader.remove(), 600);
+    }
+    }, 4200);
+    });
+
+    // Transmission channel: EmailJS removed. Easter egg preserved.
+    function recSendTransmission() {
+      const btn    = document.getElementById('rec-send-btn');
+      const status = document.getElementById('rec-send-status');
+      const name   = document.getElementById('identifier').value.trim();
+
+      if (name === 'DEADOLDWORLD') { dowOpen(); return; }
+
+      status.style.color = 'var(--red)';
+      status.textContent = '⚠ SECURE CHANNEL OFFLINE. TRANSMISSION NOT SENT.';
+    }
+
+    /* Service worker: offline support (PWA) */
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(err => console.warn('SW failed', err));
+      });
+    }
+
+    </script>
+
+</body>
+</html>

@@ -1,4 +1,4 @@
-const CACHE = 'rec-v2';
+const CACHE = 'rec-v3';
 const ASSETS = [
   './',
   './index.html',
@@ -21,7 +21,8 @@ self.addEventListener('activate', (e) => {
   );
 });
 
-// Network first: always fetch the latest version when online; use the saved copy only when offline.
+// Network first: use the latest version when online.
+// Fall back to the saved copy when offline OR when the site returns an error (e.g. 404).
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
   e.respondWith(
@@ -29,8 +30,9 @@ self.addEventListener('fetch', (e) => {
       if (res && res.ok && new URL(e.request.url).origin === location.origin) {
         const copy = res.clone();
         caches.open(CACHE).then((c) => c.put(e.request, copy));
+        return res;
       }
-      return res;
+      return caches.match(e.request).then((cached) => cached || res);
     }).catch(() => caches.match(e.request))
   );
 });
